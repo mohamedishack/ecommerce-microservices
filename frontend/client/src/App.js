@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
-import ProductList from "./ProductList";
-import Login from "./Login";
+import Home from "./pages/Home";
+import Login from "./pages/Login";
 
 function App() {
   const [token, setToken] = useState(null);
@@ -13,7 +13,7 @@ function App() {
   return (
     <div>
       {token ? (
-        <ProductList />
+        <Home />
       ) : (
         <Login setToken={setToken} />
       )}
