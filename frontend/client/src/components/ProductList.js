@@ -34,11 +34,6 @@ function ProductList() {
       localStorage.setItem("cart", JSON.stringify(cart));
     }
   }, [cart]);
-  const removeFromCart = (index) => {
-    const updatedCart = cart.filter((_, i) => i !== index);
-    setCart(updatedCart);
-  };
-
   // API call
   useEffect(() => {
     axios

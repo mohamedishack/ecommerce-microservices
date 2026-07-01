@@ -1,49 +1,68 @@
-import React, { useState } from "react";
-import axios from "axios";
+import { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 
-function Login({ setToken }) {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+import AuthLayout from "../layouts/AuthLayout";
+import { login } from "../services/AuthService";
+
+function Login() {
+  const navigate = useNavigate();
+
+  const [form, setForm] = useState({
+    email: "",
+    password: "",
+  });
+
+  const handleChange = (e) => {
+    setForm({
+      ...form,
+      [e.target.name]: e.target.value,
+    });
+  };
 
   const handleLogin = async () => {
     try {
-      const res = await axios.post(
-        "http://localhost:3000/auth/login",
-        { email, password }
-      );
+      const res = await login(form);
 
       localStorage.setItem("token", res.data.token);
-      setToken(res.data.token);
 
+      navigate("/home");
     } catch (err) {
-      alert("Login failed");
+      alert(err.response?.data?.message || "Login failed");
     }
   };
 
   return (
-    <div style={{ padding: "20px" }}>
-      <h2>Login</h2>
+    <AuthLayout>
+      <h3>Login</h3>
 
       <input
-        type="text"
+        name="email"
         placeholder="Email"
-        value={email}
-        onChange={(e) => setEmail(e.target.value)}
+        onChange={handleChange}
       />
 
       <br /><br />
 
       <input
         type="password"
+        name="password"
         placeholder="Password"
-        value={password}
-        onChange={(e) => setPassword(e.target.value)}
+        onChange={handleChange}
       />
 
       <br /><br />
 
-      <button onClick={handleLogin}>Login</button>
-    </div>
+      <button onClick={handleLogin}>
+        Login
+      </button>
+
+      <p>
+        Don't have an account?
+
+        <Link to="/register"> Register</Link>
+      </p>
+
+    </AuthLayout>
   );
 }
 

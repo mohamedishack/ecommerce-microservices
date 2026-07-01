@@ -1,9 +1,8 @@
 import React from 'react'
 
-const ProductCard = ({ product, addToCart }) => {
+const ProductCard = ({ product, onAddToCart }) => {
     return (
         <div
-            key={product._id}
             style={{
                 border: "1px solid #ddd",
                 padding: "10px",
@@ -14,7 +13,9 @@ const ProductCard = ({ product, addToCart }) => {
             <h3>{product.name}</h3>
             <p>₹{product.price}</p>
             <p>{product.category}</p>
-            <button onClick={() => addToCart(product)}>Add to Cart</button>
+            <button onClick={() => onAddToCart(product)}>
+                Add to Cart
+            </button>
         </div>
     )
 }

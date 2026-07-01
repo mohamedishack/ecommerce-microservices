@@ -14,6 +14,7 @@ const SearchBar = ({ search, setSearch, category, setCategory }) => {
 
             {/* Category Filter */}
             <select
+                value={category}
                 onChange={(e) => setCategory(e.target.value)}
                 style={{ padding: "8px", marginLeft: "10px" }}
             >

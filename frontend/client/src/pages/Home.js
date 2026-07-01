@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from "react";
-import axios from "axios";
 import { getProducts } from "../services/ProductService";
 import Header from "../components/Header";
 import SearchBar from "../components/SearchBar";
 import Cart from "../components/Cart";
 import ProductCard from "../components/ProductCard";
+import { useNavigate } from "react-router-dom";
 
 function Home() {
     const [products, setProducts] = useState([]);
@@ -13,7 +13,7 @@ function Home() {
     const [category, setCategory] = useState("");
     const [cart, setCart] = useState([]);
     const cartCount = cart.reduce((sum, item) => sum + item.quantity, 0);
-
+    const navigate = useNavigate();
     const loadProducts = async () => {
         try {
             const res = await getProducts({
@@ -38,7 +38,7 @@ function Home() {
 
     const logout = () => {
         localStorage.removeItem("token");
-        window.location.reload();
+        navigate("/");
     };
 
     // Load once
@@ -53,24 +53,6 @@ function Home() {
             localStorage.setItem("cart", JSON.stringify(cart));
         }
     }, [cart]);
-    const removeFromCart = (index) => {
-        const updatedCart = cart.filter((_, i) => i !== index);
-        setCart(updatedCart);
-    };
-
-    // API call
-    useEffect(() => {
-        axios
-            .get("http://localhost:3000/products", {
-                params: {
-                    search: debouncedSearch,
-                    category: category,
-                },
-            })
-            .then((res) => setProducts(res.data))
-            .catch((err) => console.log(err));
-    }, [debouncedSearch, category]);
-
     const addToCart = (product) => {
         const existing = cart.find((item) => item._id === product._id);
 
@@ -130,8 +112,11 @@ function Home() {
                     }}
                 >
                     {products.map((p) => (
-                        <ProductCard product={p}
-                            onAddToCart={addToCart} />
+                        <ProductCard
+                            key={p._id}
+                            product={p}
+                            onAddToCart={addToCart}
+                        />
                     ))}
                 </div>
 
